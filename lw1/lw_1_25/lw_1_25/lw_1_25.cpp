@@ -37,6 +37,7 @@
 #include <fstream>
 #include <optional>
 #include <string>
+#include "Dictionary.h"
 
 using namespace std;
 
@@ -58,17 +59,29 @@ optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-bool CopyStreams(istream& input, ostream& output)
+bool HandleStreams(istream& input, ostream& output)
 {
-	char ch;
-	while (input.get(ch))
+	Dictionary dict;
+	string str;
+	input >> str;
+	dict.AddSearchWord(str);
+
+	while(input >> str)
 	{
-		if (!output.put(ch))
+		dict.AddWord(str);
+	}
+
+	output << dict.GetPoints() << endl;
+
+	for (auto& item : dict.GetFoundWords())
+	{
+		if (!(output << item << endl))
 		{
 			cout << "Failed to save data on disk\n";
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -128,7 +141,7 @@ int main(int argc, char* argv[])
 	}
 
 
-	if (!CopyStreams(input, output))
+	if (!HandleStreams(input, output))
 	{
 		return 1;
 	}

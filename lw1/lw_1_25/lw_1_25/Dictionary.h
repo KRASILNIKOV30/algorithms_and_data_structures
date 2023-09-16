@@ -13,7 +13,7 @@ public:
 	std::vector<std::string> GetFoundWords();
 
 private:
-	typedef std::map<char, int> WordInfo;
+	typedef std::vector<char> WordInfo;
 	WordInfo GetWordInfo(std::string const& word) const;
 	bool IsCompoundedWord(std::string const& word) const;
 	static bool Compare(std::string const& left, std::string const& right);

@@ -1,2 +1,5 @@
-﻿  lw1_25_tests.cpp
+﻿  Dictionary.cpp
+C:\Users\bkras\source\repos\algorithms_and_data_structures\lw1\lw_1_25\lw_1_25\Dictionary.cpp(14,26): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+  lw1_25_tests.cpp
+  Создание кода...
   lw1_25_tests.vcxproj -> C:\Users\bkras\source\repos\algorithms_and_data_structures\lw1\lw_1_25\x64\Debug\lw1_25_tests.exe

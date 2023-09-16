@@ -42,7 +42,7 @@ Dictionary::WordInfo Dictionary::GetWordInfo(std::string const& word) const
 	WordInfo wordInfo;
 	for (auto it = word.begin(); it != word.end(); it++)
 	{
-		wordInfo[*it]++;
+		wordInfo.push_back(*it);
 	}
 	return wordInfo;
 }
@@ -50,10 +50,15 @@ Dictionary::WordInfo Dictionary::GetWordInfo(std::string const& word) const
 bool Dictionary::IsCompoundedWord(std::string const& word) const
 {
 	WordInfo wordInfo = GetWordInfo(word);
+	WordInfo searchWordInfo = m_searchWordInfo;
 	bool result = true;
 	for (auto it = wordInfo.begin(); it != wordInfo.end() && result; it++)
 	{
-		result = m_searchWordInfo.contains(it->first) && m_searchWordInfo.at(it->first) >= it->second;
+		auto searchIt = std::find(searchWordInfo.begin(), searchWordInfo.end(), *it);
+		result = searchIt != searchWordInfo.end();
+		if (result) {
+			searchWordInfo.erase(searchIt);
+		}
 	}
 
 	return result;

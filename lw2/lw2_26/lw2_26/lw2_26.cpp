@@ -8,7 +8,6 @@
 //Автор: Красильников Богдан, ПС-21
 //Среда выполнения: Visual studio 2022
 
-
 #include <iostream>
 #include <fstream>
 #include <optional>

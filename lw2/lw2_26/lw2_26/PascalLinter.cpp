@@ -21,31 +21,171 @@ void PascalLinter::Analyze()
 	{
 		while (m_currentLine >> word)
 		{
-			if (stack.IsEmpty())
+			if (word == "END;" || word == "END.")
+			{
+				word = "END";
+			}
+
+			if (word == "UNTIL")
+			{
+				if (stack.IsEmpty() || stack.GetTop() != "REPEAT")
+				{
+					throw std::exception("");
+				}
+				else
+				{
+					stack.Pop();
+				}
+			}
+
+			else if (word == "ELSE")
+			{
+				if (stack.IsEmpty() || stack.GetTop() != "THEN")
+				{
+					throw std::exception("");
+				}
+				else
+				{
+					stack.Pop();
+					stack.Pop();
+				}
+			}
+
+			else if (word == "RECORD")
+			{
+				if (!stack.IsEmpty() && stack.GetTop() != "VAR")
+				{
+					throw std::exception("");
+				}
+				else
+				{
+					stack.Push(word);
+				}
+			}
+
+			else if (stack.IsEmpty())
 			{
 				if (m_keyWords.contains(word))
 				{
 					stack.Push(word);
 				}
-				else
-				{
-					throw std::exception("operator expected");
-				}
 			}
 			else
 			{
-				if (stack.GetTop() == "IF")
+				if (stack.GetTop() == "VAR" && m_keyWords.contains(word))
+				{
+					if (word == "BEGIN")
+					{
+						stack.Pop();
+						stack.Push("BEGIN");
+					}
+					else if (word == "RECORD")
+					{
+						stack.Push(word);
+					}
+				}
+
+				else if (stack.GetTop() == "IF" && m_keyWords.contains(word))
 				{
 					if (word == "THEN")
 					{
 						stack.Push(word);
 					}
-					else if (m_keyWords.contains(word))
+					else
 					{
 						throw std::exception("THEN expected");
 					}
 				}
+
+				else if (stack.GetTop() == "THEN" && m_keyWords.contains(word))
+				{
+					if (word == "END")
+					{
+						stack.Pop();
+						stack.Pop();
+
+						if (stack.IsEmpty() || stack.GetTop() != "BEGIN")
+						{
+							throw std::exception("");
+						}
+						else
+						{
+							stack.Pop();
+						}
+					}
+					else if (word == "IF" || word == "REPEAT")
+					{
+						stack.Pop();
+						stack.Pop();
+						stack.Push(word);
+					}
+					else if (word == "BEGIN")
+					{
+						stack.Push(word);
+					}
+					else
+					{
+						throw std::exception("");
+					}
+				}
+
+				else if (stack.GetTop() == "BEGIN" && m_keyWords.contains(word))
+				{
+					if (word == "END")
+					{
+						stack.Pop();
+
+						if (!stack.IsEmpty() && stack.GetTop() == "THEN")
+						{
+							stack.Pop();
+							stack.Pop();
+						}
+					}
+					else
+					{
+						stack.Push(word);
+					}
+				}
+
+				else if (stack.GetTop() == "RECORD" && m_keyWords.contains(word))
+				{
+					if (word == "END")
+					{
+						stack.Pop();
+
+						if (!stack.IsEmpty() && stack.GetTop() == "VAR")
+						{
+							stack.Pop();
+						}
+					}
+					else
+					{
+						throw std::exception("END excpected");
+					}
+				}
+
+				else if (stack.GetTop() == "REPEAT" && m_keyWords.contains(word))
+				{
+					stack.Push(word);
+				}
 			}
+		}
+	}
+
+	while (!stack.IsEmpty())
+	{
+		if (stack.GetTop() == "THEN")
+		{
+			stack.Pop();
+			stack.Pop();
+		}
+		else if (stack.GetTop() == "BEGIN" || stack.GetTop() == "RECORD")
+		{
+			throw std::exception("END expected");
+		}
+		else if (stack.GetTop() == "VAR")
+		{
+			stack.Pop();
 		}
 	}
 

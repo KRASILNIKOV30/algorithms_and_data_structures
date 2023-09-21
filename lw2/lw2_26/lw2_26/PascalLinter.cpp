@@ -17,6 +17,7 @@ PascalLinter::PascalLinter(std::istream& input, std::ostream& output)
 void PascalLinter::Analyze()
 {
 	std::string word;
+	int IFHasOperator = 0;
 	while (NextLine())
 	{
 		while (m_currentLine >> word)
@@ -67,7 +68,14 @@ void PascalLinter::Analyze()
 			{
 				if (m_keyWords.contains(word))
 				{
-					stack.Push(word);
+					if (word == "END")
+					{
+						throw std::exception("");
+					}
+					else
+					{
+						stack.Push(word);
+					}
 				}
 			}
 			else
@@ -101,35 +109,51 @@ void PascalLinter::Analyze()
 					}
 				}
 
-				else if (stack.GetTop() == "THEN" && m_keyWords.contains(word))
+				else if (stack.GetTop() == "THEN")
 				{
-					if (word == "END")
+					if (m_keyWords.contains(word))
 					{
-						stack.Pop();
-						stack.Pop();
-
-						if (stack.IsEmpty() || stack.GetTop() != "BEGIN")
+						if (word == "END")
 						{
-							throw std::exception("");
+							stack.Pop();
+							stack.Pop();
+
+							if (stack.IsEmpty() || stack.GetTop() != "BEGIN")
+							{
+								throw std::exception("");
+							}
+							else
+							{
+								stack.Pop();
+							}
+						}
+						else if (word == "BEGIN" || word == "IF" || word == "REPEAT")
+						{
+							if (IFHasOperator)
+							{
+								stack.Pop();
+								stack.Pop();
+								IFHasOperator = 0;
+							}
+							stack.Push(word);
 						}
 						else
 						{
-							stack.Pop();
+							throw std::exception("");
 						}
-					}
-					else if (word == "IF" || word == "REPEAT")
-					{
-						stack.Pop();
-						stack.Pop();
-						stack.Push(word);
-					}
-					else if (word == "BEGIN")
-					{
-						stack.Push(word);
 					}
 					else
 					{
-						throw std::exception("");
+						if (IFHasOperator && m_stringNumber != IFHasOperator)
+						{
+							stack.Pop();
+							stack.Pop();
+							IFHasOperator = 0;
+						}
+						else
+						{
+							IFHasOperator = m_stringNumber;
+						}
 					}
 				}
 
@@ -139,11 +163,11 @@ void PascalLinter::Analyze()
 					{
 						stack.Pop();
 
-						if (!stack.IsEmpty() && stack.GetTop() == "THEN")
+						/*if (!stack.IsEmpty() && stack.GetTop() == "THEN")
 						{
 							stack.Pop();
 							stack.Pop();
-						}
+						}*/
 					}
 					else
 					{

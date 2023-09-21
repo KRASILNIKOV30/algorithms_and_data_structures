@@ -1,5 +1,9 @@
+
 VAR
   Ch: CHAR;
+  T: RECORD
+        name: CH;
+     END
 BEGIN
     READ(Ch);
     IF Ch <> '#'
@@ -8,16 +12,45 @@ BEGIN
         IF Ch <> ' '
         THEN
           WRITE(Ch);
-        READ(Ch)
+        REPEAT
+          READ(Ch)
+        UNTIL Ch <> ' '
       END
     ELSE
-      IF  Ch <> ' '
-      THEN
-        A := 0
-      ELSE
-        BEGIN
-        END
+      BEGIN
+        IF  Ch <> ' '
+        THEN
+          BEGIN
+            A := 0
+            F := 9
+            REPEAT
+              BEGIN
+                IF
+                THEN
+                  IF
+                  THEN
+                    Ch := 0
+                  ELSE
+                    IF
+                    THEN
+                      Ch := 5
+              END
+            UNTIL
+          END
+        ELSE
+          BEGIN ENDO := 0; END
+      END;
     WRITELN
+  IF
+  THEN
     IF
     THEN
+      IF
+      THEN
+        REPEAT
+        UNTIL
+      ELSE
+        Ch := 0 
+  ELSE
+    Ch := 0
 END.

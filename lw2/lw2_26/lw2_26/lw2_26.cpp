@@ -36,25 +36,7 @@ optional<Args> ParseArgs(int argc, char* argv[])
 
 bool HandleStreams(istream& input, ostream& output)
 {
-	string str;
-	input >> str;
 	PascalLinter linter(input, output);
-
-	while (input >> str)
-	{
-		//dict.AddWord(str);
-	}
-
-	//output << dict.GetPoints() << endl;
-
-	/*for (auto& item : dict.GetFoundWords())
-	{
-		if (!(output << item << endl))
-		{
-			cout << "Failed to save data on disk\n";
-			return false;
-		}
-	}*/
 
 	return true;
 }

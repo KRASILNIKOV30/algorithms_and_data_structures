@@ -83,6 +83,10 @@ void PascalLinter::Analyze()
 					{
 						stack.Push(word);
 					}
+					else if (word == "END")
+					{
+						throw std::exception("");
+					}
 				}
 
 				else if (stack.GetTop() == "IF" && m_keyWords.contains(word))
@@ -187,6 +191,15 @@ void PascalLinter::Analyze()
 		{
 			stack.Pop();
 		}
+		else if (stack.GetTop() == "END")
+		{
+			throw std::exception("");
+		}
+		else if (stack.GetTop() == "REPEAT")
+		{
+			throw std::exception("UNTIL excpected");
+		}
+
 	}
 
 	Success();

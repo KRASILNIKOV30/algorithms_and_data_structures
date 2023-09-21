@@ -1,0 +1,23 @@
+VAR
+  Ch: CHAR;
+BEGIN
+    READ(Ch);
+    IF Ch <> '#'
+    THEN
+      BEGIN
+        IF Ch <> ' '
+        THEN
+          WRITE(Ch);
+        READ(Ch)
+      END
+    ELSE
+      IF  Ch <> ' '
+      THEN
+        A := 0
+      ELSE
+        BEGIN
+        END
+    WRITELN
+    IF
+    THEN
+END.

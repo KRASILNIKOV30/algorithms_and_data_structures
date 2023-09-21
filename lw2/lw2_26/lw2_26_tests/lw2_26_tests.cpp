@@ -219,4 +219,24 @@ SCENARIO_METHOD(IOFixture, "Incorrect programs")
 		"END.\n"
 	);
 	CHECK(GetOutput() == "Error at line 13: ");
+
+	Input
+	(
+		"BEGIN\n"
+		"  IF Ch <> ' '\n"
+		"  THEN\n"
+		"  END\n"
+		"END\n"
+	);
+	CHECK(GetOutput() == "Error at line 5: ");
+
+	Input
+	(
+		"VAR\n"
+		"  Ch: CHAR;\n"
+		"END\n"
+		"BEGIN\n"
+		"END\n"
+	);
+	CHECK(GetOutput() == "Error at line 3: ");
 }

@@ -1,0 +1,20 @@
+A o
+. B o
+.. E a
+... G o
+.... K l
+... F l
+... J a
+.... L l
+.... M l
+... N l
+. C o
+.. O o
+... P l
+... Q l
+.. R l
+. D o
+.. T l
+.. S a
+... U l
+... V l

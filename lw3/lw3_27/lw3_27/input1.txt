@@ -1,0 +1,14 @@
+A a
+. B o
+.. E l
+.. F o
+... N l
+... O l
+.. G a
+... P l
+... R l
+. C l
+. D o
+.. H l
+.. K l
+.. L l

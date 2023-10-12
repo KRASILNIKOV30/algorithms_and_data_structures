@@ -20,7 +20,7 @@ struct Node
 	int childIndex = 0;
 };
 
-NodeType GetType(char ch)
+NodeType GetType(const char ch)
 {
 	switch (ch)
 	{
@@ -47,12 +47,15 @@ Node* LoadTree(std::istream& input)
 
 	int curLevel = 1;
 	std::string line;
-	while (std::getline(input, line))
+	while (true)
 	{
 		std::string levelStr;
 		std::string value;
-		input >> levelStr;
-		int level = levelStr.size();
+		if (!(input >> levelStr))
+		{
+			break;
+		}
+		const int level = levelStr.size();
 		input >> value;
 		char ch;
 		input >> ch;
@@ -63,7 +66,7 @@ Node* LoadTree(std::istream& input)
 		}
 		else if (level < curLevel)
 		{
-			int dLevel = curLevel - level;
+			const int dLevel = curLevel - level;
 			for (int i = 0; i < dLevel; i++)
 			{
 				parent = parent->parent;
@@ -78,7 +81,7 @@ Node* LoadTree(std::istream& input)
 	return root;
 }
 
-void PrintTree(std::ostream& output, Node* node)
+void PrintTree(std::ostream& output, const Node* node)
 {
 	for (int i = 0; i < node->level; i++)
 	{
@@ -96,13 +99,14 @@ void PrintTree(std::ostream& output, Node* node)
 	case NodeType::OR:
 		PrintTree(output, node->children[node->childIndex]);
 		break;
+	default: break;
 	}
 }
 
 void ResetTree(Node* node)
 {
 	node->childIndex = 0;
-	for (auto& child : node->children)
+	for (const auto& child : node->children)
 	{
 		ResetTree(child);
 	}
@@ -124,12 +128,13 @@ bool NextTree(Node* node, bool& toggled)
 		case NodeType::OR:
 			NextTree(node->children[node->childIndex], toggled);
 			break;
+		default: break;
 		}
 		if (!toggled && node->type == NodeType::OR && node->childIndex < node->children.size() - 1)
 		{
 			node->childIndex++;
 			toggled = true;
-			Node* resetNode = node;
+			const Node* resetNode = node;
 			while (resetNode->parent != nullptr)
 			{
 				resetNode = resetNode->parent;
@@ -137,7 +142,7 @@ bool NextTree(Node* node, bool& toggled)
 				{
 					ResetTree(resetNode->children[i]);
 				}
-			} 
+			}
 		}
 	}
 	return toggled;
@@ -155,5 +160,6 @@ void AndOrTreeHandling(std::istream& input, std::ostream& output)
 		output << std::endl;
 		toggle = false;
 		i++;
-	} while (NextTree(root, toggle));
+	}
+	while (NextTree(root, toggle));
 }

@@ -1,1 +1,4 @@
-﻿  lw3_27.vcxproj -> C:\Users\bkras\source\repos\algorithms_and_data_structures\lw3\lw3_27\x64\Debug\lw3_27.exe
+﻿  AndOrTree.cpp
+C:\Users\bkras\source\repos\algorithms_and_data_structures\lw3\lw3_27\lw3_27\AndOrTree.cpp(58,36): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\bkras\source\repos\algorithms_and_data_structures\lw3\lw3_27\lw3_27\AndOrTree.cpp(58,36): warning C4267: инициализация: преобразование из "size_t" в "const int"; возможна потеря данных
+  lw3_27.vcxproj -> C:\Users\bkras\source\repos\algorithms_and_data_structures\lw3\lw3_27\x64\Debug\lw3_27.exe

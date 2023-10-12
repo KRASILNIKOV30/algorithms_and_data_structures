@@ -137,7 +137,15 @@
     <Text Include="in2.txt" />
     <Text Include="in3.txt" />
     <Text Include="in4.txt" />
+    <Text Include="input.txt" />
+    <Text Include="input1.txt" />
+    <Text Include="input2.txt" />
+    <Text Include="input3.txt" />
     <Text Include="out.txt" />
+    <Text Include="output.txt" />
+    <Text Include="output1.txt" />
+    <Text Include="output2.txt" />
+    <Text Include="output3.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AndOrTree.h" />

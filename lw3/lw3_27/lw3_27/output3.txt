@@ -1,0 +1,57 @@
+Number 1
+A
+.B
+..E
+
+Number 2
+A
+.B
+..F
+...L
+
+Number 3
+A
+.B
+..F
+...M
+
+Number 4
+A
+.B
+..G
+...N
+...O
+
+Number 5
+A
+.C
+
+Number 6
+A
+.D
+..H
+
+Number 7
+A
+.D
+..K
+...P
+
+Number 8
+A
+.D
+..K
+...R
+....X
+....Y
+....Z
+
+Number 9
+A
+.D
+..S
+
+Number 10
+A
+.W
+

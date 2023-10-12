@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Исходные файлы\tests">
+      <UniqueIdentifier>{78074aba-2d8a-468b-8386-e3020c25d94c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\OutTests">
+      <UniqueIdentifier>{7790a697-07de-4c91-8d45-c5cda054c66b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -23,20 +29,44 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="in1.txt">
-      <Filter>Исходные файлы</Filter>
-    </Text>
     <Text Include="out.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
+    <Text Include="in1.txt">
+      <Filter>Исходные файлы\tests</Filter>
+    </Text>
     <Text Include="in2.txt">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Исходные файлы\tests</Filter>
     </Text>
     <Text Include="in3.txt">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Исходные файлы\tests</Filter>
     </Text>
     <Text Include="in4.txt">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Исходные файлы\tests</Filter>
+    </Text>
+    <Text Include="input.txt">
+      <Filter>Исходные файлы\tests</Filter>
+    </Text>
+    <Text Include="input1.txt">
+      <Filter>Исходные файлы\tests</Filter>
+    </Text>
+    <Text Include="input2.txt">
+      <Filter>Исходные файлы\tests</Filter>
+    </Text>
+    <Text Include="input3.txt">
+      <Filter>Исходные файлы\tests</Filter>
+    </Text>
+    <Text Include="output.txt">
+      <Filter>Исходные файлы\OutTests</Filter>
+    </Text>
+    <Text Include="output1.txt">
+      <Filter>Исходные файлы\OutTests</Filter>
+    </Text>
+    <Text Include="output2.txt">
+      <Filter>Исходные файлы\OutTests</Filter>
+    </Text>
+    <Text Include="output3.txt">
+      <Filter>Исходные файлы\OutTests</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

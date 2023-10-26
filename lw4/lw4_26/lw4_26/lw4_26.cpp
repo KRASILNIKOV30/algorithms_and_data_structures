@@ -23,6 +23,7 @@
 //Автор: Красильников Богдан, ПС-21
 //Среда выполнения: Visual studio 2022
 
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <optional>
@@ -142,7 +143,7 @@ bool AllPermanent(Table const& table)
 {
 	for (const auto& cell : table)
 	{
-		if (!cell.first.permanent)
+		if (!(cell.first.permanent && cell.second.permanent))
 		{
 			return false;
 		}
@@ -174,62 +175,103 @@ int main(int argc, char* argv[])
 
 	Table table;
 
-	table.push_back({ 0, 0, true, 0 });
+	table.push_back({
+		{ 0, 0, true, 0 },
+		{INF, 0, false, 0}
+		});
 	int currVertex = 0;
 
 	for (int i = 1; i < vertexesNum; i++)
 	{
-		table.push_back(
-			{
-				{
-					INF,
-					0,
-					false,
-					i
-				},
-				{
-					INF,
-					0,
-					false,
-					i
-				}
+		table.push_back({
+			{INF, 0, false, i},
+			{INF, 0, false, i}
 			}
 		);
 	}
 
 	while (!AllPermanent(table))
 	{
-		TableCell* min = new TableCell{ INF, 0, false, 0 };
+		Cell* min = new Cell{ INF, 0, false, 0 };
+		Cell* min2 = new Cell{ INF, 0, false, 0 };
 
 		for (int i = 0; i < vertexesNum; i++)
 		{
 			TableCell* d = &table[i];
 			TableCell* c = &table[currVertex];
 			int w = graph[currVertex][i];
+
 			if (!d->first.permanent && w != 0 && c->first.value + w < d->first.value)
 			{
 				d->first.value = c->first.value + w;
 				d->first.parent = currVertex;
 			}
-			if (!d->first.permanent && d->first.value < min->first.value)
+			else if (!d->second.permanent && w != 0 && c->first.value + w < d->second.value)
 			{
-				min = d;
+				d->second.value = c->first.value + w;
+				d->second.parent = currVertex;
 			}
 		}
 
-		if (min->first.value == INF)
+		std::vector<Cell*> firstCells;
+		std::vector<Cell*> secondCells;
+		for (auto& tableCell : table)
+		{
+			if (!tableCell.first.permanent)
+			{
+				firstCells.push_back(&tableCell.first);
+			}
+			if (!tableCell.second.permanent)
+			{
+				secondCells.push_back(&tableCell.second);
+			}
+		}
+
+		std::ranges::sort(firstCells, [](Cell* left, Cell* right) {return left->value < right->value; });
+		std::ranges::sort(secondCells, [](Cell* left, Cell* right) {return left->value < right->value; });
+
+		if (firstCells.size() != 0)
+		{
+			min = firstCells[0];
+			firstCells.erase(firstCells.begin());
+		}
+
+		if (firstCells.size() != 0)
+		{
+			min2 = firstCells[0];
+			min2 = &table[firstCells[0]->vertex].second;
+			min2->value = firstCells[0]->value;
+			min2->parent = firstCells[0]->parent;
+			firstCells[0]->value = INF;
+			firstCells.erase(firstCells.begin());
+		}
+		else if (secondCells.size() != 0)
+		{
+			min2 = secondCells[0];
+		}
+
+		if (min->value == INF && min2->value == INF)
 		{
 			break;
 		}
 
-		min->first.permanent = true;
-		currVertex = min->first.vertex;
+		min->permanent = true;
+		min2->permanent = true;
+		currVertex = min->vertex;
+
+		for (auto& cell : table)
+		{
+			output << cell.first.value << "(" << cell.first.parent + 1 << ")" <<
+				cell.second.value << "(" << cell.second.parent + 1 << ") ";
+		}
+
+		output << std::endl;
 	}
 
-	for (auto& cell : table)
+	/*for (auto& cell : table)
 	{
-		output << cell.first.vertex + 1 << " " << cell.first.value << "(" << cell.first.parent + 1 << ") " << cell.first.permanent << std::endl;
-	}
+		output << cell.second.vertex + 1 << " " << cell.second.value << "(" << cell.second.parent + 1 << ") " << cell.second.permanent << std::endl;
+	}*/
 
 	if (!SaveErrorHandling(output))
 	{

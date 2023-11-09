@@ -133,8 +133,21 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="input.txt" />
+    <Text Include="input1.txt" />
     <Text Include="input2.txt" />
+    <Text Include="input3.txt" />
+    <Text Include="input4.txt" />
+    <Text Include="input5.txt" />
+    <Text Include="input6.txt" />
+    <Text Include="input7.txt" />
     <Text Include="output.txt" />
+    <Text Include="OUTPUT1.TXT" />
+    <Text Include="OUTPUT2.TXT" />
+    <Text Include="OUTPUT3.TXT" />
+    <Text Include="OUTPUT4.TXT" />
+    <Text Include="OUTPUT5.TXT" />
+    <Text Include="output6.txt" />
+    <Text Include="OUTPUT7.TXT" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

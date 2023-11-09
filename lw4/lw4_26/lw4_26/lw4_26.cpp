@@ -30,6 +30,7 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <stack>
 
 using namespace std;
 using Graph = std::vector<std::vector<int>>;
@@ -49,6 +50,7 @@ struct TableCell
 };
 
 using Table = std::vector<TableCell>;
+constexpr int INF = std::numeric_limits<int>::max();
 
 struct Args
 {
@@ -169,7 +171,6 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	constexpr int INF = std::numeric_limits<int>::max();
 	Graph graph;
 	int vertexesNum = ReadGraph(graph, input);
 
@@ -179,7 +180,6 @@ int main(int argc, char* argv[])
 		{ 0, 0, true, 0 },
 		{INF, 0, false, 0}
 		});
-	int currVertex = 0;
 
 	for (int i = 1; i < vertexesNum; i++)
 	{
@@ -190,73 +190,51 @@ int main(int argc, char* argv[])
 		);
 	}
 
+	int currVertex = 0;
+	int isCurrSecond = false;
 	while (!AllPermanent(table))
 	{
-		Cell* min = new Cell{ INF, 0, false, 0 };
-		Cell* min2 = new Cell{ INF, 0, false, 0 };
-
 		for (int i = 0; i < vertexesNum; i++)
 		{
 			TableCell* d = &table[i];
 			TableCell* c = &table[currVertex];
 			int w = graph[currVertex][i];
+			const int currValue = isCurrSecond ? c->second.value : c->first.value;
 
-			if (!d->first.permanent && w != 0 && c->first.value + w < d->first.value)
+			if (!d->first.permanent && w != 0 && currValue + w < d->first.value)
 			{
-				d->first.value = c->first.value + w;
+				d->second = d->first;
+				d->first.value = currValue + w;
 				d->first.parent = currVertex;
 			}
-			else if (!d->second.permanent && w != 0 && c->first.value + w < d->second.value)
+			else if (!d->second.permanent && w != 0 && currValue + w < d->second.value)
 			{
-				d->second.value = c->first.value + w;
+				d->second.value = currValue + w;
 				d->second.parent = currVertex;
 			}
 		}
 
-		std::vector<Cell*> firstCells;
-		std::vector<Cell*> secondCells;
-		for (auto& tableCell : table)
+		Cell* min = new Cell{ INF, 0, false, 0 };
+		for (auto& [first, second] : table)
 		{
-			if (!tableCell.first.permanent)
+			if (!first.permanent && first.value < min->value)
 			{
-				firstCells.push_back(&tableCell.first);
+				min = &first;
+				isCurrSecond = false;
 			}
-			if (!tableCell.second.permanent)
+			if (!second.permanent && second.value < min->value)
 			{
-				secondCells.push_back(&tableCell.second);
+				min = &second;
+				isCurrSecond = true;
 			}
 		}
 
-		std::ranges::sort(firstCells, [](Cell* left, Cell* right) {return left->value < right->value; });
-		std::ranges::sort(secondCells, [](Cell* left, Cell* right) {return left->value < right->value; });
-
-		if (firstCells.size() != 0)
-		{
-			min = firstCells[0];
-			firstCells.erase(firstCells.begin());
-		}
-
-		if (firstCells.size() != 0)
-		{
-			min2 = firstCells[0];
-			min2 = &table[firstCells[0]->vertex].second;
-			min2->value = firstCells[0]->value;
-			min2->parent = firstCells[0]->parent;
-			firstCells[0]->value = INF;
-			firstCells.erase(firstCells.begin());
-		}
-		else if (secondCells.size() != 0)
-		{
-			min2 = secondCells[0];
-		}
-
-		if (min->value == INF && min2->value == INF)
+		if (min->value == INF)
 		{
 			break;
 		}
 
 		min->permanent = true;
-		min2->permanent = true;
 		currVertex = min->vertex;
 
 		for (auto& cell : table)
@@ -264,14 +242,52 @@ int main(int argc, char* argv[])
 			output << cell.first.value << "(" << cell.first.parent + 1 << ")" <<
 				cell.second.value << "(" << cell.second.parent + 1 << ") ";
 		}
-
+		output << " min: " << min->vertex + 1;
 		output << std::endl;
 	}
 
-	/*for (auto& cell : table)
+	std::stack<int> stack;
+
+	for (auto const cell : table)
 	{
-		output << cell.second.vertex + 1 << " " << cell.second.value << "(" << cell.second.parent + 1 << ") " << cell.second.permanent << std::endl;
-	}*/
+		bool secondPath = false;
+		int value = 0;
+		if (cell.second.value != INF && cell.first.vertex != 0)
+		{
+			TableCell curr = cell;
+			value = curr.second.value;
+			stack.push(curr.first.vertex);
+			while (curr.first.vertex != 0)
+			{
+				if (!secondPath && curr.second.value != INF)
+				{
+					value = curr.second.value;
+					secondPath = true;
+					curr = table[curr.second.parent];
+					stack.push(curr.first.vertex);
+				}
+				else
+				{
+					curr = table[curr.first.parent];
+					stack.push(curr.first.vertex);
+				}
+			}
+			if (secondPath)
+			{
+				output << value << ": ";
+				while (!stack.empty())
+				{
+					output << stack.top() + 1;
+					stack.pop();
+					if (!stack.empty())
+					{
+						output << " -> ";
+					}
+				}
+				output << std::endl;
+			}
+		}
+	}
 
 	if (!SaveErrorHandling(output))
 	{

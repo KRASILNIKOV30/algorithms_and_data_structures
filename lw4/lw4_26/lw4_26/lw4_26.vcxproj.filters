@@ -29,5 +29,44 @@
     <Text Include="input2.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
+    <Text Include="input1.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="OUTPUT1.TXT">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="OUTPUT2.TXT">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="OUTPUT3.TXT">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="OUTPUT4.TXT">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="OUTPUT5.TXT">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="output6.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="OUTPUT7.TXT">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="input3.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="input4.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="input5.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="input6.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="input7.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
   </ItemGroup>
 </Project>

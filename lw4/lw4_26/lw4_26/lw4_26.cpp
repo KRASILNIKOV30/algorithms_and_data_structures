@@ -236,57 +236,22 @@ int main(int argc, char* argv[])
 
 		min->permanent = true;
 		currVertex = min->vertex;
-
-		for (auto& cell : table)
-		{
-			output << cell.first.value << "(" << cell.first.parent + 1 << ")" <<
-				cell.second.value << "(" << cell.second.parent + 1 << ") ";
-		}
-		output << " min: " << min->vertex + 1;
-		output << std::endl;
 	}
 
-	std::stack<int> stack;
-
-	for (auto const cell : table)
+	for (const auto& [first, second] : table)
 	{
-		bool secondPath = false;
 		int value = 0;
-		if (cell.second.value != INF && cell.first.vertex != 0)
+		if (first.vertex == 0)
 		{
-			TableCell curr = cell;
-			value = curr.second.value;
-			stack.push(curr.first.vertex);
-			while (curr.first.vertex != 0)
-			{
-				if (!secondPath && curr.second.value != INF)
-				{
-					value = curr.second.value;
-					secondPath = true;
-					curr = table[curr.second.parent];
-					stack.push(curr.first.vertex);
-				}
-				else
-				{
-					curr = table[curr.first.parent];
-					stack.push(curr.first.vertex);
-				}
-			}
-			if (secondPath)
-			{
-				output << value << ": ";
-				while (!stack.empty())
-				{
-					output << stack.top() + 1;
-					stack.pop();
-					if (!stack.empty())
-					{
-						output << " -> ";
-					}
-				}
-				output << std::endl;
-			}
+			continue;
 		}
+		if (second.value == INF)
+		{
+			output << "No" << std::endl;
+			continue;
+		}
+		value = second.value;
+		output << value << std::endl;
 	}
 
 	if (!SaveErrorHandling(output))

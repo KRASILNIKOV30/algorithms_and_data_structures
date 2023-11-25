@@ -10,6 +10,7 @@
 #include <optional>
 #include <string>
 #include "Tree.h"
+#include <stdlib.h> 
 
 const std::string OUTPUT_FILE_NAME = "out.bin";
 const std::streamsize RECORD_SIZE = 20;
@@ -27,8 +28,7 @@ std::streamsize FillTree(std::istream& input, std::ostream& output, Tree& tree)
 		}
 
 		output.write(data.c_str(), RECORD_SIZE);
-		tree.Insert(key, inputSize);
-		++inputSize;
+		tree.Insert(key, inputSize++);
 	}
 
 	return inputSize;
@@ -74,17 +74,53 @@ int main(int argc, char* argv[])
 	Tree tree;
 	std::streamsize fileSize = FillTree(input, output, tree);
 	output.close();
-	output.open(OUTPUT_FILE_NAME, std::ios::binary | std::ios::in);
 	
-	std::cout << tree;
 
-	/*for (int i = fileSize - 1; i >= 0; i--)
+	while (true)
 	{
-		output.seekp(i * RECORD_SIZE);
-		char* record = new char [RECORD_SIZE];
+		system("cls");
+		std::cout << tree << std::endl;
+		std::cout << "Enter key to find or `e` to exit" << std::endl << "> ";
+		int key = 0;
+		if (!(std::cin >> key))
+		{
+			break;
+		}
+		std::streampos offset;
+		try
+		{
+			offset = tree.Search(key);
+		}
+		catch (std::invalid_argument)
+		{
+			std::cout << "Key not found" << std::endl;
+			std::cout << "Enter data for " << key << " key" << std::endl << "> ";
+			std::string data;
+			std::cin >> data;
+			output.open(OUTPUT_FILE_NAME, std::ios::binary | std::ios::out);
+			output.write(data.c_str(), RECORD_SIZE);
+			output.close();
+			tree.Insert(key, fileSize++);
+
+			continue;
+		}
+
+		output.seekp(offset * RECORD_SIZE);
+		char* record = new char[RECORD_SIZE];
+		output.open(OUTPUT_FILE_NAME, std::ios::binary | std::ios::in);
 		output.read(record, RECORD_SIZE);
+		output.close();
 		std::cout << record << std::endl;
-	}*/
+		delete[] record;
+
+		std::cout << "Continue? (y/n)" << std::endl << "> ";
+		std::string answer;
+		std::cin >> answer;
+		if (answer != "y" && answer != "Y" && answer != "")
+		{
+			break;
+		}
+	}
 
 	return 0;
 }

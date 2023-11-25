@@ -75,17 +75,16 @@ int main(int argc, char* argv[])
 	std::streamsize fileSize = FillTree(input, output, tree);
 	output.close();
 	output.open(OUTPUT_FILE_NAME, std::ios::binary | std::ios::in);
-	std::cout << fileSize << std::endl;
+	
+	std::cout << tree;
 
-	auto it = std::istreambuf_iterator(output);
-
-	for (int i = fileSize - 1; i >= 0; i--)
+	/*for (int i = fileSize - 1; i >= 0; i--)
 	{
 		output.seekp(i * RECORD_SIZE);
 		char* record = new char [RECORD_SIZE];
 		output.read(record, RECORD_SIZE);
 		std::cout << record << std::endl;
-	}
+	}*/
 
 	return 0;
 }

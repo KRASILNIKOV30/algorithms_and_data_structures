@@ -1,4 +1,5 @@
 #include "Tree.h"
+#include <stdexcept>
 
 Tree::Tree()
 {
@@ -75,13 +76,17 @@ void Tree::InsertToNode(int key, BNode* node, std::streampos data)
 void Tree::Sort(BNode* node)
 {
     int m;
+    std::streampos n;
     for (int i = 0; i < (2 * t - 1); i++) {
         for (int j = i + 1; j <= (2 * t - 1); j++) {
             if ((node->keys[i] != 0) && (node->keys[j] != 0)) {
                 if ((node->keys[i]) > (node->keys[j])) {
                     m = node->keys[i];
+                    n = node->data[i];
                     node->keys[i] = node->keys[j];
+                    node->data[i] = node->data[j];
                     node->keys[j] = m;
+                    node->data[j] = n;
                 }
             }
             else break;
@@ -96,19 +101,29 @@ void Tree::Restruct(BNode* node)
     //первый сын
     BNode* child1 = new BNode;
     int j;
-    for (j = 0; j <= t - 2; j++) child1->keys[j] = node->keys[j];
+    for (j = 0; j <= t - 2; j++) 
+    {
+        child1->keys[j] = node->keys[j];
+        child1->data[j] = node->data[j];
+    }
     for (j = t - 1; j <= (2 * t - 1); j++) child1->keys[j] = 0; // Инициализация всех остальных ключей, кроме первого
     child1->count = t - 1; //количество ключей в узле
-    if (node->countSons != 0) {
-        for (int i = 0; i <= (t - 1); i++) {
+    if (node->countSons != 0) 
+    {
+        for (int i = 0; i <= (t - 1); i++)
+        {
             child1->children[i] = node->children[i];
             child1->children[i]->parent = child1;
         }
-        for (int i = t; i <= (2 * t); i++) child1->children[i] = nullptr;
+        for (int i = t; i <= (2 * t); i++) 
+        {
+            child1->children[i] = nullptr;
+        }
         child1->leaf = false;
         child1->countSons = t - 1; //количество сыновей
     }
-    else {
+    else
+    {
         child1->leaf = true;
         child1->countSons = 0;
         for (int i = 0; i <= (2 * t); i++) child1->children[i] = nullptr; // Инициализация всех сыновей nullptr
@@ -116,7 +131,11 @@ void Tree::Restruct(BNode* node)
 
     //второй сын
     BNode* child2 = new BNode;
-    for (int j = 0; j <= (t - 1); j++) child2->keys[j] = node->keys[j + t];
+    for (int j = 0; j <= (t - 1); j++) 
+    { 
+        child2->keys[j] = node->keys[j + t]; 
+        child2->data[j] = node->data[j + t];
+    }
     for (j = t; j <= (2 * t - 1); j++) child2->keys[j] = 0; // Инициализация всех остальных ключей, кроме первого
     child2->count = t; //количество ключей в узле
     if (node->countSons != 0) {
@@ -134,28 +153,35 @@ void Tree::Restruct(BNode* node)
         for (int i = 0; i <= (2 * t); i++) child2->children[i] = nullptr; // Инициализация всех сыновей nullptr
     }
 
-    //родитель
-    if (node == root) { //если родителя нет, то это корень
+    if (node == root) {
         node->keys[0] = node->keys[t - 1];
+        node->data[0] = node->data[t - 1];
         for (int j = 1; j <= (2 * t - 1); j++) node->keys[j] = 0;
         node->children[0] = child1;
         node->children[1] = child2;
         for (int i = 2; i <= (2 * t); i++) node->children[i] = nullptr;
-        node->parent = nullptr; // Лишнее
         node->leaf = false;
         node->count = 1;
         node->countSons = 2;
         child1->parent = node;
         child2->parent = node;
     }
-    else {
+    else
+    {
         InsertToNode(node->keys[t - 1], node->parent, node->data[t - 1]);
         for (int i = 0; i <= (2 * t); i++) {
-            if (node->parent->children[i] == node) node->parent->children[i] = nullptr;
+            if (node->parent->children[i] == node)
+            {
+                node->parent->children[i] = nullptr;
+            }
         }
         for (int i = 0; i <= (2 * t); i++) {
-            if (node->parent->children[i] == nullptr) {
-                for (int j = (2 * t); j > (i + 1); j--) node->parent->children[j] = node->parent->children[j - 1];
+            if (node->parent->children[i] == nullptr) 
+            {
+                for (int j = (2 * t); j > (i + 1); j--) 
+                {
+                    node->parent->children[j] = node->parent->children[j - 1]; 
+                }
                 node->parent->children[i + 1] = child2;
                 node->parent->children[i] = child1;
                 break;
@@ -172,28 +198,40 @@ void Tree::Restruct(BNode* node)
 
 std::streampos Tree::SearchKey(int key, BNode* node)
 {
-    if (node != nullptr) {
-        if (node->leaf == false) {
-            int i;
-            for (i = 0; i <= (2 * t - 1); i++) {
-                if (node->keys[i] != 0) {
-                    if (key == node->keys[i]) return true;
-                    if ((key < node->keys[i])) {
-                        return SearchKey(key, node->children[i]);
-                        break;
-                    }
-                }
-                else break;
-            }
-            return SearchKey(key, node->children[i]);
-        }
-        else {
-            for (int j = 0; j <= (2 * t - 1); j++)
-                if (key == node->keys[j]) return true;
-            return 0;
-        }
+    if (node == nullptr)
+    {
+        throw std::invalid_argument("");
     }
-    else return 0;
+    if (node->leaf == false)
+    {
+        int i;
+        for (i = 0; i <= (2 * t - 1); i++)
+        {
+            if (node->keys[i] != 0)
+            {
+                if (key == node->keys[i])
+                {
+                    return node->data[i];
+                }
+                if ((key < node->keys[i])) {
+                    return SearchKey(key, node->children[i]);
+                    break;
+                }
+            }
+            else break;
+        }
+        return SearchKey(key, node->children[i]);
+    }
+    else {
+        for (int j = 0; j <= (2 * t - 1); j++)
+        {
+            if (key == node->keys[j])
+            {
+                return node->data[j];
+            }
+        }
+        throw std::invalid_argument("");
+    }
 }
 
 void Tree::DeleteNode(BNode* node)
@@ -237,4 +275,31 @@ void Tree::Rconnect(BNode* node, BNode* othernode)
 
 void Tree::Repair(BNode* node)
 {
+}
+
+void Tree::WriteNode(BNode* node, std::ostream& stream, std::string indent) const
+{
+    stream << indent;
+    for (int i = 0; i < t * 2 - 1; ++i)
+    {
+        if (node->keys[i] != 0)
+        {
+            stream << node->keys[i] << " ";
+        }
+    }
+    stream << std::endl;
+
+    for (int i = 0; i < t * 2; ++i)
+    {
+        if (node->children[i] != nullptr)
+        {
+            WriteNode(node->children[i], stream, indent + "__");
+        }
+    }
+}
+
+std::ostream& operator<<(std::ostream& stream, const Tree& tree)
+{
+    tree.WriteNode(tree.root, stream, "");
+    return stream;
 }

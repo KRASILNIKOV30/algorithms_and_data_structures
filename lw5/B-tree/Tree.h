@@ -20,6 +20,7 @@ public:
     void Insert(int key, std::streampos data);
     std::streampos Search(int key);
     void Remove(int key);
+    friend std::ostream& operator <<(std::ostream& stream, const Tree& tree);
 
 private:
     BNode* root = nullptr;
@@ -34,5 +35,5 @@ private:
     void Lconnect(BNode* node, BNode* othernode);
     void Rconnect(BNode* node, BNode* othernode);
     void Repair(BNode* node);
+    void WriteNode(BNode* node, std::ostream& stream, std::string indent) const;
 };
-

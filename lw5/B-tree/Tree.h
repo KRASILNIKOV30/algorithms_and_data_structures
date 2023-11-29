@@ -26,7 +26,7 @@ private:
     BNode* root = nullptr;
     void InsertToNode(int key, BNode* node, std::streampos data);
     void Sort(BNode* node);
-    void Restruct(BNode* node);
+    void Restruct(BNode* &node);
     std::streampos SearchKey(int key, BNode* node);
     void DeleteNode(BNode* node);
     void Remove(int key, BNode* node);

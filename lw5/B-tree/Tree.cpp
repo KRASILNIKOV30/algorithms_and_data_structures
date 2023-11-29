@@ -48,9 +48,12 @@ void Tree::Insert(int key, std::streampos data)
         InsertToNode(key, ptr, data);
 
         while (ptr->count == 2 * t) {
-            Restruct(ptr);
             if (ptr == root) {
+                Restruct(ptr);
                 break;
+            }
+            else {
+                Restruct(ptr);
             }
         }
     }
@@ -94,7 +97,7 @@ void Tree::Sort(BNode* node)
     }
 }
 
-void Tree::Restruct(BNode* node)
+void Tree::Restruct(BNode*& node)
 {
     if (node->count < (2 * t - 1)) return;
 
@@ -156,7 +159,9 @@ void Tree::Restruct(BNode* node)
     if (node == root) {
         node->keys[0] = node->keys[t - 1];
         node->data[0] = node->data[t - 1];
-        for (int j = 1; j <= (2 * t - 1); j++) node->keys[j] = 0;
+        for (int j = 1; j <= (2 * t - 1); j++) {
+            node->keys[j] = 0;
+        }
         node->children[0] = child1;
         node->children[1] = child2;
         for (int i = 2; i <= (2 * t); i++) node->children[i] = nullptr;
@@ -280,7 +285,7 @@ void Tree::Repair(BNode* node)
 void Tree::WriteNode(BNode* node, std::ostream& stream, std::string indent) const
 {
     stream << indent;
-    for (int i = 0; i < t * 2 - 1; ++i)
+    for (int i = 0; i < t * 2; ++i)
     {
         if (node->keys[i] != 0)
         {

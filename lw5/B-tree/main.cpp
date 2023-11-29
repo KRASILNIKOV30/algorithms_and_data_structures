@@ -1,6 +1,6 @@
-//27. Имеется  И - ИЛИ   дерево, соответствующее   некоторому
-//множеству  конструкций.Требуется выдать на экран в наглядном
-//виде все элементы дерева(14).
+//22. Составить   программу  поиска  записи  с  включением  в 
+//сильно   ветвящемся   Б-дереве   порядка  N.  Б-дерево  должно 
+//храниться и обрабатываться в файле с прямым доступом (12).
 //
 //Автор: Красильников Богдан, ПС-21
 //Среда выполнения: Visual studio 2022
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 	std::cin >> inputFileName;
 
 	std::ifstream input(inputFileName);
-	std::fstream output(OUTPUT_FILE_NAME, std::ios::binary | std::ios::out);
+	std::fstream output(OUTPUT_FILE_NAME, std::ios::binary  | std::ios::out);
 
 	if (!OpenStreamsErrorHandling(input))
 	{
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 			std::cout << "Enter data for " << key << " key" << std::endl << "> ";
 			std::string data;
 			std::cin >> data;
-			output.open(OUTPUT_FILE_NAME, std::ios::binary | std::ios::out);
+			output.open(OUTPUT_FILE_NAME, std::ios::binary | std::ios::app);
 			output.write(data.c_str(), RECORD_SIZE);
 			output.close();
 			tree.Insert(key, fileSize++);
@@ -105,9 +105,9 @@ int main(int argc, char* argv[])
 			continue;
 		}
 
+		output.open(OUTPUT_FILE_NAME, std::ios::binary | std::ios::in);
 		output.seekp(offset * RECORD_SIZE);
 		char* record = new char[RECORD_SIZE];
-		output.open(OUTPUT_FILE_NAME, std::ios::binary | std::ios::in);
 		output.read(record, RECORD_SIZE);
 		output.close();
 		std::cout << record << std::endl;

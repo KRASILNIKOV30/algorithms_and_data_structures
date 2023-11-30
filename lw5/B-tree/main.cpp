@@ -34,7 +34,7 @@ std::streamsize FillTree(std::istream& input, std::ostream& output, Tree& tree)
 	return inputSize;
 }
 
-bool OpenStreamsErrorHandling(std::ifstream& input)
+bool OpenStreamsErrorHandling(std::fstream& input)
 {
 
 	if (!input.is_open())
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 	std::string inputFileName;
 	std::cin >> inputFileName;
 
-	std::ifstream input(inputFileName);
+	std::fstream input(inputFileName, std::ios::in);
 	std::fstream output(OUTPUT_FILE_NAME, std::ios::binary  | std::ios::out);
 
 	if (!OpenStreamsErrorHandling(input))
@@ -74,7 +74,8 @@ int main(int argc, char* argv[])
 	Tree tree;
 	std::streamsize fileSize = FillTree(input, output, tree);
 	output.close();
-	
+	input.close();
+	input.open(inputFileName, std::ios::app);
 
 	while (true)
 	{
@@ -97,6 +98,7 @@ int main(int argc, char* argv[])
 			std::cout << "Enter data for " << key << " key" << std::endl << "> ";
 			std::string data;
 			std::cin >> data;
+			input << key << " " << data << std::endl;
 			output.open(OUTPUT_FILE_NAME, std::ios::binary | std::ios::app);
 			output.write(data.c_str(), RECORD_SIZE);
 			output.close();

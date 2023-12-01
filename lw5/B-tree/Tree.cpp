@@ -64,10 +64,6 @@ std::streampos Tree::Search(int key)
     return SearchKey(key, this->root);
 }
 
-void Tree::Remove(int key)
-{
-}
-
 void Tree::InsertToNode(int key, BNode* node, std::streampos data)
 {
     node->keys[node->count] = key;
@@ -256,30 +252,6 @@ void Tree::DeleteNode(BNode* node)
             }
         }
     }
-}
-
-void Tree::Remove(int key, BNode* node)
-{
-}
-
-void Tree::RemoveFromNode(int key, BNode* node)
-{
-}
-
-void Tree::RemoveLeaf(int key, BNode* node)
-{
-}
-
-void Tree::Lconnect(BNode* node, BNode* othernode)
-{
-}
-
-void Tree::Rconnect(BNode* node, BNode* othernode)
-{
-}
-
-void Tree::Repair(BNode* node)
-{
 }
 
 void Tree::WriteNode(BNode* node, std::ostream& stream, std::string indent) const

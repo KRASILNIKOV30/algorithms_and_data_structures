@@ -19,7 +19,6 @@ public:
     ~Tree();
     void Insert(int key, std::streampos data);
     std::streampos Search(int key);
-    void Remove(int key);
     friend std::ostream& operator <<(std::ostream& stream, const Tree& tree);
 
 private:
@@ -29,11 +28,5 @@ private:
     void Restruct(BNode* &node);
     std::streampos SearchKey(int key, BNode* node);
     void DeleteNode(BNode* node);
-    void Remove(int key, BNode* node);
-    void RemoveFromNode(int key, BNode* node);
-    void RemoveLeaf(int key, BNode* node);
-    void Lconnect(BNode* node, BNode* othernode);
-    void Rconnect(BNode* node, BNode* othernode);
-    void Repair(BNode* node);
     void WriteNode(BNode* node, std::ostream& stream, std::string indent) const;
 };
